@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Sent Successfully - MomentCraft</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .success-container {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .success-icon {
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .success-icon img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+        }
+
+        .success-title {
+            font-size: 28px;
+            color: #2d1b4e;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .gift-url-display {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.9s ease;
+            word-break: break-all;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .success-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .btn-success {
+            background: #d1d1d1;
+            color: #2d1b4e;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-success:hover {
+            background: #c0c0c0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-success:active {
+            transform: translateY(0);
+        }
+
+        .btn-success i {
+            font-size: 18px;
+        }
+
+        .btn-primary {
+            background: #ff7b2d;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e66a24;
+        }
+
+        /* Message Box Styling */
+        .message-box-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .message-box-overlay.active {
+            display: block;
+        }
+
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            text-align: center;
+            max-width: 90%;
+            display: none;
+        }
+
+        .message-box.active {
+            display: block;
+        }
+
+        .message-box h3 {
+            color: #2d1b4e;
+            margin-bottom: 15px;
+        }
+
+        .message-box p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .message-box button {
+            background: #ff7b2d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 520px) {
+            .success-title {
+                font-size: 24px;
+            }
+
+            .success-icon img {
+                width: 200px;
+            }
+
+            .btn-success {
+                font-size: 15px;
+                padding: 16px 35px;
+            }
+
+            .gift-url-display {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Message Box -->
+    <div id="message-overlay" class="message-box-overlay"></div>
+    <div id="message-box" class="message-box">
+        <h3 id="message-title"></h3>
+        <p id="message-text"></p>
+        <button onclick="hideMessageBox()">OK</button>
+    </div>
+
+    <!-- Success Container -->
+    <div class="success-container">
+        <div class="success-icon">
+            <img src="amplop.png" width="250" height="auto" alt="Gift Icon">
+        </div>
+        
+        <h1 class="success-title">Selamat, kado Ucapan Siap Dikirim</h1>
+        
+        <div class="gift-url-display" id="gift-url-display">
+            https://www.momentcraft.com/gift/...
+        </div>
+        
+        <div class="success-buttons">
+            <button class="btn-success" onclick="copyGiftURL()">
+                <i class="fas fa-copy"></i>
+                Salin URL
+            </button>
+            <button class="btn-success" onclick="shareGift()">
+                <i class="fas fa-share-alt"></i>
+                Bagikan
+            </button>
+            <button class="btn-success btn-primary" onclick="createAnother()">
+                <i class="fas fa-plus"></i>
+                Buat Kado Lagi
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Get gift URL from URL parameters or localStorage
+        let currentGiftURL = '';
+
+        function initializePage() {
+            // Get URL from localStorage (set by script.js)
+            const storedURL = localStorage.getItem('lastGiftURL');
+            
+            if (storedURL) {
+                currentGiftURL = storedURL;
+            } else {
+                // Fallback: construct from URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const giftId = urlParams.get('id');
+                
+                if (giftId) {
+                    const protocol = window.location.protocol;
+                    const host = window.location.host;
+                    const pathname = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+                    currentGiftURL = `${protocol}//${host}${pathname}/gift.html?id=${giftId}`;
+                } else {
+                    currentGiftURL = 'URL tidak tersedia';
+                }
+            }
+            
+            // Display the URL
+            document.getElementById('gift-url-display').textContent = currentGiftURL;
+        }
+
+        // Message Box Functions
+        function showMessageBox(title, text) {
+            document.getElementById('message-title').textContent = title;
+            document.getElementById('message-text').textContent = text;
+            document.getElementById('message-overlay').classList.add('active');
+            document.getElementById('message-box').classList.add('active');
+        }
+
+        function hideMessageBox() {
+            document.getElementById('message-overlay').classList.remove('active');
+            document.getElementById('message-box').classList.remove('active');
+        }
+
+        // Copy Gift URL to Clipboard
+        async function copyGiftURL() {
+            try {
+                await navigator.clipboard.writeText(currentGiftURL);
+                showMessageBox("Berhasil!", "URL kado telah disalin ke clipboard!");
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = currentGiftURL;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showMessageBox("Berhasil!", "URL kado telah disalin ke clipboard!");
+                } catch (err) {
+                    showMessageBox("Error", "Gagal menyalin URL. Silakan coba lagi.");
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // Share Gift using Web Share API
+        async function shareGift() {
+            const shareData = {
+                title: 'MomentCraft Gift',
+                text: 'Saya telah membuat kado spesial untuk Anda!',
+                url: currentGiftURL
+            };
+            
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                    console.log('Gift shared successfully');
+                } else {
+                    // Fallback: copy to clipboard if share is not supported
+                    await navigator.clipboard.writeText(currentGiftURL);
+                    showMessageBox("Info", "Browser Anda tidak mendukung fitur berbagi. URL telah disalin ke clipboard!");
+                }
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    console.error('Error sharing:', err);
+                    showMessageBox("Error", "Gagal membagikan kado. Silakan coba lagi.");
+                }
+            }
+        }
+
+        // Create Another Gift
+        function createAnother() {
+            window.location.href = 'index.html';
+        }
+
+        // Initialize page on load
+        window.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>

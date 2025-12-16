@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Special Gift - MomentCraft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Georgia", serif;
+            min-height: 100vh;
+            background-image: url('Assets/ign latte.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+        }
+
+        /* Stage 1: Closed Envelope */
+        .stage {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+        }
+
+        .stage.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .envelope-closed {
+            width: 350px;
+            height: 250px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-closed:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope-flap-closed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .seal {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: #9c27b0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            color: white;
+            box-shadow: 0 5px 20px rgba(156, 39, 176, 0.5);
+            z-index: 10;
+        }
+
+        /* Stage 2: Opened Envelope */
+        .envelope-opened {
+            width: 350px;
+            height: 250px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .envelope-flap-open {
+            position: absolute;
+            top: -80px;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%);
+            clip-path: polygon(0 100%, 100% 100%, 50% 0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform-origin: bottom center;
+        }
+
+        /* Stage 3: Letter Peeking */
+        .letter-peek {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            height: 220px;
+            background-image: url('Assets/paper1.png');
+            background-size: auto;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .letter-peek:hover {
+            transform: translateX(-50%) translateY(-10px);
+        }
+
+        /* Stage 4: Full Letter */
+        .letter-full {
+            width: 100%;
+            max-width: 500px;
+            min-height: 400px;
+            background-image: url('Assets/paper1.png');
+            /* Default background - kucing pattern */
+            background-size: auto 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 15px;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .recipient-name {
+            font-size: 28px;
+            color: #2d1b4e;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .moment-badge {
+            display: inline-block;
+            background: #ff7b2d;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .gift-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .letter-body {
+            margin: 30px 0;
+        }
+
+        .greeting {
+            font-size: 20px;
+            color: #2d1b4e;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .message {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+
+        .signature {
+            text-align: right;
+            font-size: 18px;
+            color: #2d1b4e;
+            font-style: italic;
+        }
+
+        /* Stage 5: Photo Display */
+        .photo-display {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            font-size: 100px;
+            color: #ccc;
+        }
+
+        /* Sparkle Effects */
+        .sparkles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('Assets/sparkle.png');
+            background-size: contain;
+            animation: sparkle-float 3s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        @keyframes sparkle-float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        /* Click Instruction */
+        .click-instruction {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #2d1b4e;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.05);
+            }
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            position: absolute;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: #ff7b2d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 123, 45, 0.3);
+        }
+
+        .nav-btn:hover {
+            background: #e66a24;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 123, 45, 0.4);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+        }
+
+        .music-player.show {
+            display: block;
+        }
+
+        /* Error Message */
+        .error-message {
+            text-align: center;
+            color: #e74c3c;
+            font-size: 18px;
+            padding: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+
+            .envelope-closed,
+            .envelope-opened {
+                width: 280px;
+                height: 200px;
+            }
+
+            .letter-full {
+                padding: 25px;
+            }
+
+            .recipient-name {
+                font-size: 22px;
+            }
+
+            .message {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <!-- Stage 1: Closed Envelope -->
+        <div class="stage active" id="stage1">
+            <div class="envelope-closed" onclick="nextStage()">
+                <div class="envelope-flap-closed"></div>
+                <div class="seal">💌</div>
+            </div>
+            <div class="click-instruction">Klik amplop untuk membuka</div>
+        </div>
+
+        <!-- Stage 2: Opened Envelope -->
+        <div class="stage" id="stage2">
+            <div class="envelope-opened" onclick="nextStage()">
+                <div class="envelope-flap-open"></div>
+            </div>
+            <div class="click-instruction">Klik lagi untuk melanjutkan</div>
+        </div>
+
+        <!-- Stage 3: Letter Peeking -->
+        <div class="stage" id="stage3">
+            <div class="envelope-opened">
+                <div class="envelope-flap-open"></div>
+                <div class="letter-peek" onclick="nextStage()"></div>
+            </div>
+            <div class="click-instruction">Klik surat untuk membuka</div>
+        </div>
+
+        <!-- Stage 4: Full Letter -->
+        <div class="stage" id="stage4">
+            <div class="letter-full">
+                <div class="sparkles" id="sparkles"></div>
+                <div class="letter-content">
+                    <div class="letter-header">
+                        <div class="recipient-name" id="recipientName">Untuk Orang Spesial</div>
+                        <div class="moment-badge" id="momentBadge">Special Gift</div>
+                        <div class="gift-date" id="giftDate">10 Desember 2025</div>
+                    </div>
+                    <div class="letter-body">
+                        <div class="greeting" id="greetingText">Hai Sahabatku,</div>
+                        <div class="message" id="giftMessage">
+                            Pesan spesial untukmu...
+                        </div>
+                        <div class="signature" id="senderSignature">
+                            Dengan penuh kasih sayang,<br />
+                            ❤ Seseorang yang peduli padamu ❤
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="click-instruction">Klik Next untuk melihat foto</div>
+        </div>
+
+        <!-- Stage 5: Photo Display -->
+        <div class="stage" id="stage5">
+            <div class="photo-display">
+                <div class="photo-frame" id="photoFrame">
+                    <div class="photo-placeholder">🎁</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons" id="navButtons" style="display: none;">
+            <button class="nav-btn" id="prevBtn" onclick="prevStage()">← Kembali</button>
+            <button class="nav-btn" id="nextBtn" onclick="nextStage()">Next →</button>
+        </div>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player" id="musicPlayer">
+        <audio id="audio-player" controls loop>
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        let giftData = null;
+        let currentStage = 1;
+        let currentLetterIndex = 0;
+        let totalLetters = 1;
+
+        // Load gift data
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const giftId = urlParams.get('id');
+
+            if (!giftId) {
+                showError('Gift ID tidak ditemukan dalam URL.');
+                return;
+            }
+
+            const storedData = localStorage.getItem(giftId);
+            if (!storedData) {
+                showError('Gift tidak ditemukan. Link mungkin sudah tidak valid.');
+                return;
+            }
+
+            try {
+                giftData = JSON.parse(storedData);
+                totalLetters = 1 + (giftData.collaborators ? giftData.collaborators.length : 0);
+                console.log('Gift data loaded:', giftData);
+                console.log('Total letters:', totalLetters);
+
+                // Apply background and visual effect from the start
+                applyBackgroundAndEffect();
+            } catch (error) {
+                showError('Error loading gift data: ' + error.message);
+            }
+        });
+
+        function showError(message) {
+            document.getElementById('container').innerHTML =
+                `<div class="error-message">${message}</div>`;
+        }
+
+        function nextStage() {
+            if (currentStage < 5) {
+                // Hide current stage
+                document.getElementById(`stage${currentStage}`).classList.remove('active');
+
+                // Move to next stage
+                currentStage++;
+
+                // Show next stage
+                document.getElementById(`stage${currentStage}`).classList.add('active');
+
+                // Start playing music when letter is clicked (stage 3)
+                if (currentStage === 3) {
+                    loadAndPlayMusic();
+                }
+
+                // Populate letter content when reaching stage 4
+                if (currentStage === 4) {
+                    populateLetterContent(currentLetterIndex);
+                    document.getElementById('navButtons').style.display = 'flex';
+                }
+
+                // Show photo when reaching stage 5
+                if (currentStage === 5) {
+                    showPhoto(currentLetterIndex);
+                    updateNavButtons();
+                }
+            }
+        }
+
+        function prevStage() {
+            if (currentStage > 1) {
+                // Hide current stage
+                document.getElementById(`stage${currentStage}`).classList.remove('active');
+
+                // Move to previous stage
+                currentStage--;
+
+                // Show previous stage
+                document.getElementById(`stage${currentStage}`).classList.add('active');
+
+                // Hide nav buttons if going back to stage 1-3
+                if (currentStage < 4) {
+                    document.getElementById('navButtons').style.display = 'none';
+                }
+
+                updateNavButtons();
+            }
+        }
+
+        function nextLetter() {
+            if (currentLetterIndex < totalLetters - 1) {
+                currentLetterIndex++;
+
+                // Reset to stage 1 for next letter
+                document.getElementById(`stage${currentStage}`).classList.remove('active');
+                currentStage = 1;
+                document.getElementById('stage1').classList.add('active');
+                document.getElementById('navButtons').style.display = 'none';
+
+                // Update instruction
+                document.querySelector('#stage1 .click-instruction').textContent =
+                    `Surat ke-${currentLetterIndex + 1} dari ${totalLetters}`;
+            }
+        }
+
+        function prevLetter() {
+            if (currentLetterIndex > 0) {
+                currentLetterIndex--;
+
+                // Reset to stage 1 for previous letter
+                document.getElementById(`stage${currentStage}`).classList.remove('active');
+                currentStage = 1;
+                document.getElementById('stage1').classList.add('active');
+                document.getElementById('navButtons').style.display = 'none';
+
+                // Update instruction
+                document.querySelector('#stage1 .click-instruction').textContent =
+                    `Surat ke-${currentLetterIndex + 1} dari ${totalLetters}`;
+            }
+        }
+
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            // Update prev button
+            if (currentStage === 1 && currentLetterIndex === 0) {
+                prevBtn.disabled = true;
+                prevBtn.textContent = '← Kembali';
+            } else if (currentStage === 1 && currentLetterIndex > 0) {
+                prevBtn.disabled = false;
+                prevBtn.textContent = '← Surat Sebelumnya';
+                prevBtn.onclick = prevLetter;
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.textContent = '← Kembali';
+                prevBtn.onclick = prevStage;
+            }
+
+            // Update next button
+            if (currentStage === 5 && currentLetterIndex < totalLetters - 1) {
+                nextBtn.disabled = false;
+                nextBtn.textContent = 'Surat Selanjutnya →';
+                nextBtn.onclick = nextLetter;
+            } else if (currentStage < 5) {
+                nextBtn.disabled = false;
+                nextBtn.textContent = 'Next →';
+                nextBtn.onclick = nextStage;
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.textContent = 'Selesai';
+            }
+        }
+
+        function applyBackgroundAndEffect() {
+            // Apply background pattern from the start (stage 1)
+            const selectedBackground = localStorage.getItem('selectedBackground');
+
+            if (selectedBackground) {
+                const backgroundMap = {
+                    'bg1': 'Assets/bg1.png',
+                    'bg2': 'Assets/bg2.png',
+                    'bg3': 'Assets/bg3.png',
+                    'bg4': 'Assets/bg4.png',
+                    'bg5': 'Assets/bg5.png'
+                };
+
+                const bgImage = backgroundMap[selectedBackground];
+                if (bgImage) {
+                    // Apply to body background (behind the letter)
+                    document.body.style.setProperty('background-image', `url('${bgImage}')`, 'important');
+                    document.body.style.setProperty('background-size', 'cover', 'important');
+                    document.body.style.setProperty('background-position', 'center', 'important');
+                    document.body.style.setProperty('background-attachment', 'fixed', 'important');
+
+                    console.log('Applied background to body from start:', bgImage);
+                }
+            }
+
+            // Apply visual effect from the start
+            const selectedEffect = localStorage.getItem('selectedEffect');
+            const container = document.querySelector('.container');
+
+            if (container && selectedEffect) {
+                // Create a sparkles container if it doesn't exist
+                let effectContainer = document.getElementById('global-effects');
+                if (!effectContainer) {
+                    effectContainer = document.createElement('div');
+                    effectContainer.id = 'global-effects';
+                    effectContainer.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        pointer-events: none;
+                        z-index: 1;
+                    `;
+                    document.body.appendChild(effectContainer);
+                }
+
+                if (selectedEffect === 'balloon') {
+                    createBalloons(effectContainer);
+                } else if (selectedEffect === 'sparkle') {
+                    createGlobalSparkles(effectContainer);
+                }
+            }
+        }
+
+        function createGlobalSparkles(container) {
+            const sparkleCount = 10;
+
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.cssText = `
+                    position: absolute;
+                    width: 30px;
+                    height: 30px;
+                    background-image: url('Assets/sparkle.png');
+                    background-size: contain;
+                    animation: sparkle-float 3s infinite ease-in-out;
+                    opacity: 0.7;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation-delay: ${Math.random() * 3}s;
+                `;
+                container.appendChild(sparkle);
+            }
+        }
+
+        function applyCustomizations() {
+            // Load customization selections from localStorage
+            const selectedBackground = localStorage.getItem('selectedBackground');
+            const selectedFontColor = localStorage.getItem('selectedFontColor') || 'white';
+
+            const letterFull = document.querySelector('.letter-full');
+
+            if (selectedBackground) {
+                // Apply background to body (page background), not to letter paper
+                const backgroundMap = {
+                    'bg1': 'Assets/bg1.png',
+                    'bg2': 'Assets/bg2.png',
+                    'bg3': 'Assets/bg3.png',
+                    'bg4': 'Assets/bg4.png',
+                    'bg6': 'Assets/bg6.png',
+                };
+
+                const bgImage = backgroundMap[selectedBackground];
+                if (bgImage) {
+                    // Apply to body background (behind the letter)
+                    document.body.style.setProperty('background-image', `url('${bgImage}')`, 'important');
+                    document.body.style.setProperty('background-size', 'cover', 'important');
+                    document.body.style.setProperty('background-position', 'center', 'important');
+                    document.body.style.setProperty('background-attachment', 'fixed', 'important');
+
+                    console.log('Applied background to body:', bgImage);
+                } else {
+                    console.log('No custom background selected, using default');
+                }
+            }
+
+            // Apply font color
+            const fontColorMap = {
+                'white': '#ffffff',
+                'black': '#000000',
+                'brown': '#8B4513',
+                'blue': '#0066cc',
+                'green': '#2d8659',
+                'purple': '#800080'
+            };
+
+            const fontColor = fontColorMap[selectedFontColor] || '#000000';
+
+            // Apply to all text elements in letter
+            document.querySelectorAll('.recipient-name, .moment-badge, .gift-date, .greeting, .message, .signature').forEach(el => {
+                el.style.color = fontColor;
+            });
+
+            // Apply visual effect (balloon or sparkle)
+            applyVisualEffect();
+        }
+
+        function applyVisualEffect() {
+            const selectedEffect = localStorage.getItem('selectedEffect');
+            const sparklesContainer = document.getElementById('sparkles');
+
+            if (!sparklesContainer) return;
+
+            // Clear existing effects
+            sparklesContainer.innerHTML = '';
+
+            if (selectedEffect === 'balloon') {
+                // Create balloon effects
+                createBalloons(sparklesContainer);
+            } else if (selectedEffect === 'sparkle') {
+                // Create sparkle effects (default)
+                createSparkles();
+            }
+        }
+
+        function createBalloons(container) {
+            const balloonCount = 6;
+            const balloonEmojis = ['🎈', '🎈', '🎈', '🎈', '🎈', '🎈'];
+
+            for (let i = 0; i < balloonCount; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.textContent = balloonEmojis[i];
+                balloon.style.cssText = `
+                    position: absolute;
+                    font-size: 40px;
+                    left: ${Math.random() * 100}%;
+                    bottom: -50px;
+                    animation: balloon-float ${5 + Math.random() * 3}s infinite ease-in-out;
+                    animation-delay: ${Math.random() * 2}s;
+                    opacity: 0.8;
+                `;
+                container.appendChild(balloon);
+            }
+
+            // Add balloon animation if not exists
+            if (!document.getElementById('balloon-animation-style')) {
+                const style = document.createElement('style');
+                style.id = 'balloon-animation-style';
+                style.textContent = `
+                    @keyframes balloon-float {
+                        0% {
+                            transform: translateY(0) rotate(0deg);
+                        }
+                        50% {
+                            transform: translateY(-400px) rotate(10deg);
+                        }
+                        100% {
+                            transform: translateY(-800px) rotate(-10deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        let musicLoaded = false;
+
+        function loadAndPlayMusic() {
+            const selectedMusic = localStorage.getItem('selectedMusic');
+
+            // Only proceed if user selected a song
+            if (!selectedMusic || musicLoaded) {
+                console.log('No music selected or already loaded');
+                return; // Exit early - don't show player
+            }
+
+            try {
+                const musicData = JSON.parse(selectedMusic);
+
+                // Check if we have music data (either src or data)
+                if (musicData && (musicData.src || musicData.data)) {
+                    const playerContainer = document.getElementById('musicPlayer');
+                    const audioPlayer = document.getElementById('audio-player');
+
+                    // Set audio source (prefer src over data)
+                    audioPlayer.src = musicData.src || musicData.data;
+
+                    // Autoplay the audio
+                    audioPlayer.play().catch(error => {
+                        console.log('Autoplay prevented:', error);
+                        // If autoplay is blocked, user needs to click play
+                    });
+
+                    // Show the music player only if song exists
+                    playerContainer.classList.add('show');
+
+                    musicLoaded = true;
+                    console.log('✅ Playing music:', musicData.name);
+                } else {
+                    console.log('Invalid music data');
+                }
+            } catch (error) {
+                console.error('Error loading music:', error);
+            }
+        }
+
+        function populateLetterContent(letterIndex = 0) {
+            if (!giftData) return;
+
+            let letterData;
+
+            if (letterIndex === 0) {
+                // Original letter
+                letterData = {
+                    recipientName: giftData.recipientName,
+                    senderName: giftData.senderName,
+                    message: giftData.message,
+                    imageData: giftData.imageData,
+                    createdAt: giftData.createdAt,
+                    momentType: giftData.momentType
+                };
+            } else {
+                // Collaborator's letter
+                const collabIndex = letterIndex - 1;
+                if (giftData.collaborators && giftData.collaborators[collabIndex]) {
+                    const collab = giftData.collaborators[collabIndex];
+                    letterData = {
+                        recipientName: giftData.recipientName,
+                        senderName: collab.senderName,
+                        message: collab.message,
+                        imageData: collab.imageData,
+                        createdAt: collab.createdAt,
+                        momentType: giftData.momentType
+                    };
+                } else {
+                    return;
+                }
+            }
+
+            // Set recipient name
+            document.getElementById('recipientName').textContent =
+                `Untuk ${letterData.recipientName || 'Orang Spesial'}`;
+
+            // Set moment badge
+            document.getElementById('momentBadge').textContent =
+                letterData.momentType || 'Special Gift';
+
+            // Set date
+            const date = new Date(letterData.createdAt);
+            document.getElementById('giftDate').textContent =
+                date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+
+            // Set greeting
+            document.getElementById('greetingText').textContent =
+                `Hai ${letterData.recipientName || 'Sahabatku'},`;
+
+            // Set message
+            document.getElementById('giftMessage').textContent =
+                letterData.message || 'Pesan spesial untukmu...';
+
+            // Set sender signature
+            document.getElementById('senderSignature').innerHTML =
+                `Dengan penuh kasih sayang,<br />❤ ${letterData.senderName || 'Seseorang yang peduli padamu'} ❤`;
+
+            // Apply customizations (background and font color)
+            applyCustomizations();
+        }
+
+        function showPhoto(letterIndex = 0) {
+            if (!giftData) return;
+
+            let imageData;
+
+            if (letterIndex === 0) {
+                imageData = giftData.imageData;
+            } else {
+                const collabIndex = letterIndex - 1;
+                if (giftData.collaborators && giftData.collaborators[collabIndex]) {
+                    imageData = giftData.collaborators[collabIndex].imageData;
+                }
+            }
+
+            const photoFrame = document.getElementById('photoFrame');
+            if (imageData && imageData !== '#') {
+                photoFrame.innerHTML = `<img src="${imageData}" alt="Gift Photo">`;
+            } else {
+                photoFrame.innerHTML = `<div class="photo-placeholder">🎁</div>`;
+            }
+        }
+
+        function createSparkles() {
+            const sparklesContainer = document.getElementById('sparkles');
+            const sparkleCount = 8;
+
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 3 + 's';
+                sparklesContainer.appendChild(sparkle);
+            }
+        }
+    </script>
+</body>
+
+</html>

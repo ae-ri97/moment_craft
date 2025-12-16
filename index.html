@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MomentCraft App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="message-overlay" class="message-box-overlay"></div>
+  <div id="message-box" class="message-box">
+    <h3 id="message-title"></h3>
+    <p id="message-text"></p>
+    <button onclick="hideMessageBox()">OK</button>
+  </div>
+
+  <div id="splash" class="page active">
+    <div class="circle circle-top-right"></div>
+    <div class="circle circle-bottom-left"></div>
+    <div class="splash-content">
+      <div class="logo">
+        <img src="logo1.png" width="350" height="auto" margin-left="auto" margin="auto">
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div id="welcome" class="page">
+    <a href="admin-login.html" class="admin-link" title="Admin Panel">
+      <i class="fas fa-shield-alt"></i>
+    </a>
+    <div class="welcome-container">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fas fa-envelope-open-text"></i>
+            <span>Surat Digital Interaktif</span>
+          </div>
+          <h1 class="hero-title">
+            Buat <span class="highlight">Surat Online</span><br />
+            Penuh Kenangan
+          </h1>
+          <p class="hero-description">
+            MomentCraft adalah platform untuk membuat surat digital yang indah dan personal.
+            Kirimkan ucapan, kenangan, dan momen spesial dengan cara yang unik dan berkesan.
+          </p>
+
+          <div class="welcome-buttons">
+            <button class="btn-gift" onclick="showPage('moment-selection')">
+              <i class="fas fa-paper-plane"></i> Buat Surat Sekarang
+            </button>
+            <button class="btn-login-white" onclick="showPage('login')">
+              <i class="fas fa-sign-in-alt"></i> Masuk
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="envelope-animation">
+            <img src="amplop.png" class="floating-envelope" alt="Envelope">
+            <div class="sparkle-effect"></div>
+            <div class="sparkle-effect"></div>
+            <div class="sparkle-effect"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="features-section">
+        <h2 class="features-title">Fitur Unggulan</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-music"></i>
+            </div>
+            <h3>Musik Latar</h3>
+            <p>Tambahkan musik favorit untuk membuat surat lebih berkesan</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-magic"></i>
+            </div>
+            <h3>Efek Visual</h3>
+            <p>Percantik surat dengan efek animasi yang menarik</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-image"></i>
+            </div>
+            <h3>Foto & Background</h3>
+            <p>Upload foto kenangan dan pilih background sesuai selera</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-share-alt"></i>
+            </div>
+            <h3>Mudah Dibagikan</h3>
+            <p>Kirim surat melalui link yang bisa dibuka kapan saja</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- How It Works -->
+      <div class="how-it-works">
+        <h2 class="section-title">Cara Kerja</h2>
+        <div class="steps-container">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Pilih Momen</h4>
+              <p>Pilih jenis momen: Ulang Tahun, Surat Cinta, atau Wisuda</p>
+            </div>
+          </div>
+
+          <div class="step-arrow">→</div>
+
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Personalisasi</h4>
+              <p>Tulis pesan, upload foto, tambah musik & efek</p>
+            </div>
+          </div>
+
+          <div class="step-arrow">→</div>
+
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Kirim</h4>
+              <p>Bagikan link surat ke orang tersayang</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="login" class="page">
+    <button class="btn-back-auth" onclick="showPage('welcome')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="auth-container">
+      <div class="auth-left">
+        <div class="circle-auth"></div>
+        <h1>Welcome Back!</h1>
+        <p>To keep connected with us please login with your personal info.</p>
+        <button class="btn-outline" onclick="showPage('register')">
+          Register
+        </button>
+      </div>
+      <div class="auth-right">
+        <form class="auth-form" id="login-form">
+          <div class="form-logo">
+            <div class="logo">
+              <img src="logo1.png" width="100" height="auto" margin-left="auto" margin="auto">
+            </div>
+
+          </div>
+          <h2 class="form-title">Log In to Account</h2>
+          <div class="form-group">
+            <input type="email" placeholder="Email" required />
+          </div>
+          <div class="form-group">
+            <input type="password" placeholder="Password" required />
+          </div>
+          <div class="forgot-password">
+            <a href="#" onclick="showMessageBox('Info','Forgot password link clicked. This is a simulation.')">Forgot
+              your password?</a>
+          </div>
+          <button type="submit" class="btn-primary">Log In</button>
+          <p class="text-center" style="margin-top: 20px; font-size: 14px">
+            Don't have an account?
+            <a href="#" onclick="showPage('register')" style="color: #ff7b2d">Register here</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="register" class="page">
+    <button class="btn-back-auth" onclick="showPage('welcome')">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="auth-container">
+      <div class="auth-left">
+        <div class="circle-auth"></div>
+        <h1>Hello, Friend!</h1>
+        <p>Enter your personal details and start your journey with us.</p>
+        <button class="btn-outline" onclick="showPage('login')">
+          Log In
+        </button>
+      </div>
+      <div class="auth-right">
+        <form class="auth-form" id="register-form">
+          <div class="form-logo">
+            <div class="logo">
+              <img src="logo1.png" width="100" height="auto" margin-left="auto" margin="auto">
+            </div>
+            <div class="brand-name"></div>
+          </div>
+          <h2 class="form-title">Create Account</h2>
+          <div class="form-group">
+            <input type="text" placeholder="Name" required />
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder="Email" required />
+          </div>
+          <div class="form-group">
+            <input type="password" placeholder="Password" required />
+          </div>
+          <button type="submit" class="btn-primary" style="margin-top: 40px">
+            Register
+          </button>
+          <p class="text-center" style="margin-top: 20px; font-size: 14px">
+            Already have an account?
+            <a href="#" onclick="showPage('login')" style="color: #ff7b2d">Log in here</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="moment-selection" class="page flex-col">
+    <div class="moment-container">
+      <button class="btn-back" onclick="showPage('welcome')">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h2 class="moment-title">
+        Choose a <span>Moment</span> to Create Your Gift
+      </h2>
+
+      <div class="moment-cards">
+        <div class="moment-card" onclick="startGiftCreation('Birthday')">
+          <i class="fas fa-birthday-cake"></i>
+          <h3>Birthday Surprise</h3>
+        </div>
+        <div class="moment-card" onclick="startGiftCreation('Love Letter')">
+          <i class="fas fa-heart"></i>
+          <h3>Love Letter</h3>
+        </div>
+        <div class="moment-card" onclick="startGiftCreation('Graduation')">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Graduation</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="create-gift" class="page">
+    <div class="create-gift-container">
+      <div class="gift-wrapper">
+        <div class="gift-header">
+          <button on class="btn-back" onclick="showPage('moment-selection')">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2 class="form-title" style="flex-grow: 1; margin: 0; font-size: 24px">
+            Create
+            <span id="current-moment-title" style="color: #ff7b2d">Your Gift</span>
+          </h2>
+        </div>
+
+        <form class="gift-card clearfix" id="gift-creation-form">
+          <input type="hidden" id="selected-moment" value="" />
+          <input type="hidden" id="selected-effect" value="none" />
+
+          <div class="sidebar-icons">
+            <button type="button" class="icon-btn" onclick="showMusicSelection()">
+              <i class="fas fa-music"></i>
+            </button>
+            <button type="button" class="icon-btn" onclick="showEffectSelection()">
+              <i class="fas fa-magic"></i>
+            </button>
+            <button type="button" class="icon-btn" onclick="showCollaborationMode()">
+              <i class="fas fa-user-friends"></i>
+            </button>
+          </div>
+
+          <div class="form-content">
+            <label for="file-upload-input" class="upload-area">
+              <input type="file" id="file-upload-input" accept="image/*" class="upload-input" />
+              <i class="fas fa-cloud-upload-alt upload-icon"></i>
+              <p class="upload-text" id="upload-status">
+                Click to upload image or video moment
+              </p>
+              <img id="upload-preview" class="upload-preview" src="#" alt="Image Preview" />
+            </label>
+
+            <div class="form-group">
+              <input type="text" id="recipient-name" class="form-input" placeholder="Recipient's Name" required />
+            </div>
+            <div class="form-group">
+              <input type="text" id="sender-name" class="form-input" placeholder="Your Name" required />
+            </div>
+            <div class="form-group">
+              <textarea id="gift-message" class="text-area" placeholder="Write your heartfelt message here..."
+                required></textarea>
+            </div>
+
+            <p class="selected-info">
+              Selected Effect: <strong id="effect-display">None</strong>
+            </p>
+            <p class="selected-info">
+              Selected Music: <strong id="music-display">None</strong>
+            </p>
+
+
+            <button type="submit" class="submit-btn" style="margin-bottom: 60px;">
+              <i class="fas fa-paper-plane"></i> Send Gift
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gift Success Page -->
+  <div id="gift-success" class="page">
+    <div class="success-container">
+      <div class="success-content">
+        <div class="success-icon">
+          <img src="amplop.png" width="250" height="auto" alt="Gift Icon">
+        </div>
+        <h1 class="success-title">Selamat, kado Ucapan Siap Dikirim</h1>
+        <div class="success-buttons">
+          <button class="btn-success" id="copy-url-btn" onclick="copyGiftURL()">
+            Salin URL
+          </button>
+          n <button class="btn-success" id="share-btn" onclick="shareGift()">
+            Bagikan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Effect Selection Modal Popup -->
+  <div id="effect-selection-page" class="effect-page" onclick="closeEffectIfClickOutside(event)">
+    <div class="effect-modal">
+      <div class="effect-header">
+        <button class="btn-back" onclick="hideEffectSelection()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h2 class="effect-title">Select Visual Effect</h2>
+      </div>
+
+      <div class="effect-content">
+        <!-- Effect Section -->
+        <div class="effect-section">
+          <h3 class="section-label">Effect</h3>
+          <div class="effect-grid" id="effect-grid-container"></div>
+        </div>
+
+        <!-- Background Section -->
+        <div class="effect-section">
+          <h3 class="section-label">Background</h3>
+          <div class="background-grid" id="background-grid-container"></div>
+        </div>
+
+        <!-- Font Color Section -->
+        <div class="effect-section">
+          <h3 class="section-label">Warna Font</h3>
+          <div class="fontcolor-container">
+            <div class="fontcolor-list" id="fontcolor-list-container"></div>
+          </div>
+        </div>
+
+        <!-- Apply Button -->
+        <div class="apply-container">
+          <button class="btn-apply-effect" onclick="applyEffect()">apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- Music Selection Popup -->
+  <div id="music-overlay" class="music-overlay" onclick="closeMusicIfClickOutside(event)">
+    <div id="music-selection-page" class="music-modal">
+      <div class="music-header">
+        <button class="btn-back-music" onclick="hideMusicSelection()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="music-logo">
+          <span style="font-size: 32px; margin-right: 8px;">🎵</span>
+          <span style="font-size: 22px; font-weight: 500; color: #000;">Music Library</span>
+        </div>
+      </div>
+
+      <!-- Audio Player Section -->
+      <div class="music-player-section" id="music-player-section" style="display: none;">
+        <audio id="music-preview-player" controls controlsList="nodownload">
+          <source src="" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+
+      <!-- Library Section -->
+      <div class="library-section">
+        <h3 class="section-label">Select from Library</h3>
+        <div class="music-library-grid" id="music-library-grid">
+          <!-- Default music can remain or we can empty this if user insists on ONLY files -->
+          <!-- Keeping defaults for now as they are effectively "files" in assets -->
+          <div class="music-item" data-type="default" data-src="Assets/happy-birthday-334876.mp3"
+            data-name="Happy Birthday Song 1" data-category="Classical" onclick="selectMusicItem(this)">
+            <div class="music-item-icon">🎵</div>
+            <div class="music-item-info">
+              <div class="music-item-name">Happy Birthday Song 1</div>
+              <div class="music-item-meta">Classical</div>
+            </div>
+          </div>
+
+          <div class="music-item" data-type="default" data-src="Assets/happy-birthday-357371.mp3"
+            data-name="Happy Birthday Song 2" data-category="Upbeat" onclick="selectMusicItem(this)">
+            <div class="music-item-icon">🎵</div>
+            <div class="music-item-info">
+              <div class="music-item-name">Happy Birthday Song 2</div>
+              <div class="music-item-meta">Upbeat</div>
+            </div>
+          </div>
+
+          <div class="music-item" data-type="default" data-src="Assets/happy-birthday-401919.mp3"
+            data-name="Happy Birthday Song 3" data-category="Modern" onclick="selectMusicItem(this)">
+            <div class="music-item-icon">🎵</div>
+            <div class="music-item-info">
+              <div class="music-item-name">Happy Birthday Song 3</div>
+              <div class="music-item-meta">Modern</div>
+            </div>
+          </div>
+
+          <!-- Admin library will be populated here -->
+        </div>
+      </div>
+
+      <div class="music-add-button-container">
+        <button class="music-apply-btn" onclick="applySelectedMusic()">
+          Apply Music
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="file-upload-utils.js"></script>
+  <script src="music-upload.js"></script>
+  <script src="script.js"></script>
+
+
+</body>
+
+</html>

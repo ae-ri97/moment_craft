@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gift Preview - MomentCraft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Georgia", serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 40px 20px;
+        }
+
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .preview-title {
+            text-align: center;
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-subtitle {
+            text-align: center;
+            color: #fff;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .envelope-gallery {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .envelope-preview-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 280px;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-preview-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .envelope-preview-item h3 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .mini-envelope {
+            width: 100%;
+            height: 180px;
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .mini-envelope-base {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 2px solid #81c784;
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .mini-envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #a5d6a7 0%, #81c784 100%);
+            border-bottom: 2px solid #81c784;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 3;
+        }
+
+        .mini-envelope-seal {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            z-index: 4;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Opened state */
+        .mini-envelope.opened .mini-envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .mini-envelope.opened .mini-envelope-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        /* Letter preview */
+        .mini-letter {
+            width: 100%;
+            height: 180px;
+            background: white;
+            border: 2px solid #81c784;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mini-letter-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .mini-letter-header h4 {
+            color: #2e7d32;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .mini-letter-date {
+            font-size: 0.7em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .mini-letter-body {
+            font-size: 0.75em;
+            color: #333;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        /* Image preview */
+        .mini-image-frame {
+            width: 100%;
+            height: 180px;
+            border: 2px solid #81c784;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .mini-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .mini-image-placeholder {
+            font-size: 3em;
+            color: #81c784;
+        }
+
+        .preview-description {
+            text-align: center;
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .back-button {
+            display: block;
+            margin: 40px auto 0;
+            padding: 15px 40px;
+            background: #ff7b2d;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 123, 45, 0.3);
+        }
+
+        .back-button:hover {
+            background: #ff6a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 123, 45, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .envelope-gallery {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .envelope-preview-item {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="preview-container">
+        <h1 class="preview-title">Preview Kado Anda</h1>
+        <p class="preview-subtitle">Berikut adalah tampilan surat saat dibuka</p>
+
+        <div class="envelope-gallery">
+            <!-- Step 1: Closed Envelope -->
+            <div class="envelope-preview-item">
+                <h3>1. Amplop Tertutup</h3>
+                <div class="mini-envelope">
+                    <div class="mini-envelope-base"></div>
+                    <div class="mini-envelope-flap"></div>
+                    <div class="mini-envelope-seal">💌</div>
+                </div>
+                <p class="preview-description">Klik pertama - Amplop mulai terbuka</p>
+            </div>
+
+            <!-- Step 2: First Open -->
+            <div class="envelope-preview-item">
+                <h3>2. Amplop Terbuka</h3>
+                <div class="mini-envelope opened">
+                    <div class="mini-envelope-base"></div>
+                    <div class="mini-envelope-flap"></div>
+                    <div class="mini-envelope-seal">💌</div>
+                </div>
+                <p class="preview-description">Klik kedua - Surat muncul</p>
+            </div>
+
+            <!-- Step 3: Letter Content -->
+            <div class="envelope-preview-item">
+                <h3>3. Isi Surat</h3>
+                <div class="mini-letter">
+                    <div class="mini-letter-header">
+                        <h4 id="preview-recipient">Untuk Orang Spesial</h4>
+                        <p class="mini-letter-date" id="preview-date">-</p>
+                    </div>
+                    <div class="mini-letter-body">
+                        <p id="preview-message">Pesan spesial Anda akan muncul di sini...</p>
+                    </div>
+                </div>
+                <p class="preview-description">Surat dengan pesan Anda</p>
+            </div>
+
+            <!-- Step 4: Image -->
+            <div class="envelope-preview-item">
+                <h3>4. Gambar Momen</h3>
+                <div class="mini-image-frame" id="preview-image-frame">
+                    <div class="mini-image-placeholder">🎁</div>
+                </div>
+                <p class="preview-description">Gambar muncul terakhir</p>
+            </div>
+        </div>
+
+        <button class="back-button" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </button>
+    </div>
+
+    <script>
+        // Load gift data from URL parameter
+        function loadPreviewData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const giftId = urlParams.get('id');
+
+            if (giftId) {
+                const storedData = localStorage.getItem(giftId);
+                if (storedData) {
+                    try {
+                        const giftData = JSON.parse(storedData);
+                        
+                        // Update preview with actual data
+                        if (giftData.recipientName) {
+                            document.getElementById('preview-recipient').textContent = 
+                                `Untuk ${giftData.recipientName}`;
+                        }
+                        
+                        if (giftData.createdAt) {
+                            const date = new Date(giftData.createdAt);
+                            document.getElementById('preview-date').textContent = 
+                                date.toLocaleDateString('id-ID', { 
+                                    day: 'numeric', 
+                                    month: 'long', 
+                                    year: 'numeric' 
+                                });
+                        }
+                        
+                        if (giftData.message) {
+                            const truncatedMessage = giftData.message.length > 100 
+                                ? giftData.message.substring(0, 100) + '...' 
+                                : giftData.message;
+                            document.getElementById('preview-message').textContent = truncatedMessage;
+                        }
+                        
+                        if (giftData.imageData && giftData.imageData !== '#') {
+                            const imageFrame = document.getElementById('preview-image-frame');
+                            imageFrame.innerHTML = `<img src="${giftData.imageData}" alt="Gift Image">`;
+                        }
+                    } catch (error) {
+                        console.error('Error loading preview data:', error);
+                    }
+                }
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Load preview on page load
+        window.addEventListener('DOMContentLoaded', loadPreviewData);
+    </script>
+</body>
+</html>
